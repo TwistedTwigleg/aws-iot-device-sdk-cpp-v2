@@ -26,8 +26,8 @@ else
     version_branch=AutoTag-${version}
     git checkout -b ${version_branch}
 
-    git config --local user.email "aws-sdk-common-runtime@amazon.com"
-    git config --local user.name "GitHub Actions"
+    git config --local user.email "ncbeard@amazon.com"
+    git config --local user.name "TwistedTwigleg"
     git add VERSION
     git commit -m "Updated version to ${version}"
 
@@ -46,7 +46,7 @@ else
     echo "Old release message is: ${tag_message}"
 
     # push the commit
-    git push -u "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/aws/aws-iot-device-sdk-cpp-v2.git" ${version_branch}
+    git push -u "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/TwistedTwigleg/aws-iot-device-sdk-cpp-v2.git" ${version_branch}
 
     gh pr create --title "AutoTag PR for ${version}" --body "AutoTag PR for ${version}" --head ${version_branch}
 
@@ -57,20 +57,20 @@ else
     # update local state with the merged pr
     git fetch
     git checkout main
-    git pull "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/aws/aws-iot-device-sdk-cpp-v2.git" main
+    git pull "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/TwistedTwigleg/aws-iot-device-sdk-cpp-v2.git" main
 
     # delete old release
     gh release delete -y ${version}
 
     # delete the old tag
     git tag -d ${version}
-    git push "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/aws/aws-iot-device-sdk-cpp-v2.git" :refs/tags/${version}
+    git push "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/TwistedTwigleg/aws-iot-device-sdk-cpp-v2.git" :refs/tags/${version}
 
     # create new tag on latest commit with old message
     git tag -f ${version} -m "${tag_message}"
 
     # push new tag to github
-    git push "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/aws/aws-iot-device-sdk-cpp-v2.git" --tags
+    git push "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/TwistedTwigleg/aws-iot-device-sdk-cpp-v2.git" --tags
 
     # now recreate the release on the updated tag
     gh release create ${version} --title "${title_value}" -p -n "${tag_message}"
